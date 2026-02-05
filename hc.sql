@@ -275,3 +275,37 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2026-02-05  2:31:07
+USE hc;
+SELECT * 
+FROM paciente
+ORDER BY id_paciente DESC;
+
+USE hc;
+
+INSERT INTO usuario (username, password_hash, rol, nombres, apellidos, email, estado)
+VALUES (
+  'admin',
+  '$2a$10$IbcqC2pPvWMNVN/P/Cv.VuMAECRD7gYRch4OZoQ9u1dlEuR3GZyui',
+  'ADMIN',
+  'Atenas',
+  'Bonifaz',
+  'atenas@gmail.com',
+  'ACTIVO'
+);
+USE hc;
+
+INSERT INTO usuario
+(username, password_hash, rol, nombres, apellidos, email, estado)
+VALUES
+(
+'usuario2',
+'$2a$10$4d5edMEGLPWRSBgkXgddK.vjecSLTffk2j3Di83pW3Ev5DTxCApUW',
+'MEDICO',
+'Andrea',
+'Torres',
+'Andrea@gmail.com',
+'ACTIVO'
+);
+SELECT id_usuario, username, email, rol, estado, password_hash
+FROM usuario
+ORDER BY id_usuario DESC;
