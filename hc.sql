@@ -306,6 +306,18 @@ VALUES
 'Andrea@gmail.com',
 'ACTIVO'
 );
+INSERT INTO usuario
+(username, password_hash, rol, nombres, apellidos, email, estado)
+VALUES
+(
+'usuario3',
+'$2a$10$G9paK.Htr7CcTHQr8zsKke0fUs5lnShqsNaUX8A/xWh.L4ODvQMCK',
+'MEDICO',
+'Eduardo',
+'Perez',
+'Eduardo@gmail.com',
+'ACTIVO'
+);
 SELECT id_usuario, username, email, rol, estado, password_hash
 FROM usuario
 ORDER BY id_usuario DESC;
