@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `hc` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `hc`;
+create database hc;
+use hc;
 -- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: hc
@@ -44,15 +44,6 @@ CREATE TABLE `admision` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `admision`
---
-
-LOCK TABLES `admision` WRITE;
-/*!40000 ALTER TABLE `admision` DISABLE KEYS */;
-/*!40000 ALTER TABLE `admision` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `detalle_historia_clinica`
 --
 
@@ -69,15 +60,6 @@ CREATE TABLE `detalle_historia_clinica` (
   CONSTRAINT `fk_detalle_medico` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `detalle_historia_clinica`
---
-
-LOCK TABLES `detalle_historia_clinica` WRITE;
-/*!40000 ALTER TABLE `detalle_historia_clinica` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detalle_historia_clinica` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `historiaclinica`
@@ -98,15 +80,6 @@ CREATE TABLE `historiaclinica` (
   KEY `fk_historia_paciente` (`id_paciente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `historiaclinica`
---
-
-LOCK TABLES `historiaclinica` WRITE;
-/*!40000 ALTER TABLE `historiaclinica` DISABLE KEYS */;
-/*!40000 ALTER TABLE `historiaclinica` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `medico`
@@ -134,15 +107,6 @@ CREATE TABLE `medico` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `medico`
---
-
-LOCK TABLES `medico` WRITE;
-/*!40000 ALTER TABLE `medico` DISABLE KEYS */;
-/*!40000 ALTER TABLE `medico` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `paciente`
 --
 
@@ -164,18 +128,8 @@ CREATE TABLE `paciente` (
   `apellido_materno` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_paciente`),
   UNIQUE KEY `UQ__Paciente__761A4C463CA342E3` (`nro_documento`)
-) ENGINE=InnoDB AUTO_INCREMENT=1005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1006 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `paciente`
---
-
-LOCK TABLES `paciente` WRITE;
-/*!40000 ALTER TABLE `paciente` DISABLE KEYS */;
-INSERT INTO `paciente` VALUES (1001,'DNI','74581236','Carlos','M','1998-06-15','987654321','Av. Siempre Viva 742','INACTIVO','2026-01-30 06:43:04','Pérez,Gómez',NULL),(1003,'DNI','73118847','FARID ISRAEL','M','2005-03-27','922941107','av.hola','ACTIVO','2026-02-05 11:57:43','URQUIZA','SAAVEDRA'),(1004,'DNI','74074569','GONZALO RAMON','M','2026-02-05','77777','rr','ACTIVO','2026-02-05 12:00:26','SARMIENT','OLIVO');
-/*!40000 ALTER TABLE `paciente` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `pago`
@@ -198,15 +152,6 @@ CREATE TABLE `pago` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pago`
---
-
-LOCK TABLES `pago` WRITE;
-/*!40000 ALTER TABLE `pago` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pago` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `sysdiagrams`
 --
 
@@ -225,15 +170,6 @@ CREATE TABLE `sysdiagrams` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sysdiagrams`
---
-
-LOCK TABLES `sysdiagrams` WRITE;
-/*!40000 ALTER TABLE `sysdiagrams` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sysdiagrams` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `usuario`
 --
 
@@ -242,28 +178,18 @@ DROP TABLE IF EXISTS `usuario`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
   `id_usuario` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
   `rol` varchar(20) NOT NULL,
   `nombres` varchar(100) NOT NULL,
-  `apellidos` varchar(100) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `estado` char(8) NOT NULL,
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `apellido_paterno` varchar(80) NOT NULL,
+  `apellido_materno` varchar(80) NOT NULL,
   PRIMARY KEY (`id_usuario`),
-  UNIQUE KEY `UQ__Usuario__F3DBC572416C0164` (`username`),
   UNIQUE KEY `UQ__Usuario__AB6E6164421A6488` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1013 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usuario`
---
-
-LOCK TABLES `usuario` WRITE;
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -274,50 +200,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-05  2:31:07
-USE hc;
-SELECT * 
-FROM paciente
-ORDER BY id_paciente DESC;
-
-USE hc;
-
-INSERT INTO usuario (username, password_hash, rol, nombres, apellidos, email, estado)
-VALUES (
-  'admin',
-  '$2a$10$IbcqC2pPvWMNVN/P/Cv.VuMAECRD7gYRch4OZoQ9u1dlEuR3GZyui',
-  'ADMIN',
-  'Atenas',
-  'Bonifaz',
-  'atenas@gmail.com',
-  'ACTIVO'
-);
-USE hc;
-
-INSERT INTO usuario
-(username, password_hash, rol, nombres, apellidos, email, estado)
-VALUES
-(
-'usuario2',
-'$2a$10$4d5edMEGLPWRSBgkXgddK.vjecSLTffk2j3Di83pW3Ev5DTxCApUW',
-'MEDICO',
-'Andrea',
-'Torres',
-'Andrea@gmail.com',
-'ACTIVO'
-);
-INSERT INTO usuario
-(username, password_hash, rol, nombres, apellidos, email, estado)
-VALUES
-(
-'usuario3',
-'$2a$10$G9paK.Htr7CcTHQr8zsKke0fUs5lnShqsNaUX8A/xWh.L4ODvQMCK',
-'MEDICO',
-'Eduardo',
-'Perez',
-'Eduardo@gmail.com',
-'ACTIVO'
-);
-SELECT id_usuario, username, email, rol, estado, password_hash
-FROM usuario
-ORDER BY id_usuario DESC;
+-- Dump completed on 2026-02-18  0:50:04
