@@ -1,5 +1,6 @@
 create database hc;
 use hc;
+
 -- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: hc
@@ -41,6 +42,28 @@ CREATE TABLE `admision` (
   CONSTRAINT `fk_admision_medico` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`),
   CONSTRAINT `fk_admision_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `auditoria`
+--
+
+DROP TABLE IF EXISTS `auditoria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auditoria` (
+  `id_auditoria` int NOT NULL AUTO_INCREMENT,
+  `usuario_email` varchar(100) NOT NULL,
+  `accion` varchar(50) NOT NULL,
+  `entidad` varchar(50) DEFAULT NULL,
+  `id_entidad` int DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `fecha` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_inicio_sesion` timestamp NULL DEFAULT NULL,
+  `fecha_fin_sesion` timestamp NULL DEFAULT NULL,
+  `duracion_segundos` int DEFAULT NULL,
+  PRIMARY KEY (`id_auditoria`)
+) ENGINE=InnoDB AUTO_INCREMENT=1010 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,12 +162,12 @@ DROP TABLE IF EXISTS `pago`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pago` (
-  `id_pago` int NOT NULL,
+  `id_pago` int NOT NULL AUTO_INCREMENT,
   `id_admision` int NOT NULL,
   `monto` decimal(10,2) NOT NULL,
   `metodo_pago` varchar(30) NOT NULL,
   `fecha_pago` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado` char(8) NOT NULL,
+  `estado` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id_pago`),
   KEY `fk_pago_admision` (`id_admision`),
   CONSTRAINT `fk_pago_admision` FOREIGN KEY (`id_admision`) REFERENCES `admision` (`id_admision`)
@@ -188,7 +211,7 @@ CREATE TABLE `usuario` (
   `apellido_materno` varchar(80) NOT NULL,
   PRIMARY KEY (`id_usuario`),
   UNIQUE KEY `UQ__Usuario__AB6E6164421A6488` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1013 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1015 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -200,4 +223,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-18  0:50:04
+-- Dump completed on 2026-02-21  2:51:33
