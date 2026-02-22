@@ -54,24 +54,6 @@ INSERT INTO `admision` VALUES (9001,'2026-02-08 05:03:59',5001,1001,1001,'Trauma
 /*!40000 ALTER TABLE `admision` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `auditoria`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auditoria` (
-  `id_auditoria` int NOT NULL AUTO_INCREMENT,
-  `usuario_email` varchar(100) NOT NULL,
-  `accion` varchar(50) NOT NULL,
-  `entidad` varchar(50) DEFAULT NULL,
-  `id_entidad` int DEFAULT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `fecha` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_inicio_sesion` timestamp NULL DEFAULT NULL,
-  `fecha_fin_sesion` timestamp NULL DEFAULT NULL,
-  `duracion_segundos` int DEFAULT NULL,
-  PRIMARY KEY (`id_auditoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=1010 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `detalle_historia_clinica`
 --
@@ -161,7 +143,6 @@ CREATE TABLE `medico` (
 LOCK TABLES `medico` WRITE;
 /*!40000 ALTER TABLE `medico` DISABLE KEYS */;
 INSERT INTO `medico` VALUES (1001,'Andrea','Torres','Traumatología',NULL,NULL,'ACTIVO','2026-02-08 05:03:38',NULL,NULL,1001);
-/*!40000 ALTER TABLE `medico` ENABLE KEYS */;
 INSERT INTO `medico` VALUES
 (1002,'OMAR YVAN','ACHAMISO ALARCON','Traumatología','912345678','omar@gmail.com','ACTIVO','2026-02-08 05:03:38','047765','028633',NULL),
 (1003,'ARTURO','AGUILAR MALDONADO','Traumatología','934567891','arturo@gmail.com','ACTIVO','2026-02-08 05:03:38','053507','024710',NULL),
@@ -172,34 +153,32 @@ INSERT INTO `medico` VALUES
 (1008,'RENATO FRANCO','ALBAN TALANCHA','Traumatología','982486751','renato@gmail.com','ACTIVO','2026-02-08 05:03:38','055940','029280',NULL),
 (1009,'ERIK LENNER','ALCALDE LOAYZA','Traumatología','948316742','erik@gmail.com','ACTIVO','2026-02-08 05:03:38','057591','031451',NULL),
 (1010,'WILBER CLETO','ALDORADIN JAUREGUI','Traumatología','976844521','wilber@gmail.com','ACTIVO','2026-02-08 05:03:38','031419','028535',NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `medico` ENABLE KEYS */;
-ALTER TABLE medico MODIFY CMP VARCHAR(10);
-ALTER TABLE medico MODIFY RNE VARCHAR(10);
---
 
+
+/*!40000 ALTER TABLE `medico` ENABLE KEYS */;
+UNLOCK TABLES;
 --
 -- Table structure for table 'horario_medico'
 --
-DROP TABLE IF EXISTS `horario_medico`;
-CREATE TABLE `horario_medico` (
-  `id_horario` int NOT NULL AUTO_INCREMENT,
-  `id_medico` int NOT NULL,
-  `dia_semana` tinyint NOT NULL COMMENT '1=Lunes, 2=Martes, 3=Miércoles, 4=Jueves, 5=Viernes, 6=Sábado, 7=Domingo',
-  `hora_inicio` time NOT NULL,
-  `hora_fin` time NOT NULL,
-  `duracion_cita` int DEFAULT 30 COMMENT 'Duración de cada cita en minutos',
-  `activo` tinyint DEFAULT 1 COMMENT '1=activo, 0=inactivo',
-  `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_horario`),
-  KEY `fk_horario_medico` (`id_medico`),
-  CONSTRAINT `fk_horario_medico` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`)
+DROP TABLE IF EXISTS horario_medico;
+CREATE TABLE horario_medico (
+  id_horario int NOT NULL AUTO_INCREMENT,
+  id_medico int NOT NULL,
+  dia_semana tinyint NOT NULL COMMENT '1=Lunes, 2=Martes, 3=Miércoles, 4=Jueves, 5=Viernes, 6=Sábado, 7=Domingo',
+  hora_inicio time NOT NULL,
+  hora_fin time NOT NULL,
+  duracion_cita int DEFAULT 30 COMMENT 'Duración de cada cita en minutos',
+  activo tinyint DEFAULT 1 COMMENT '1=activo, 0=inactivo',
+  fecha_registro timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_horario),
+  KEY fk_horario_medico (id_medico),
+  CONSTRAINT fk_horario_medico FOREIGN KEY (id_medico) REFERENCES medico (id_medico)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `horario_medico`
+-- Dumping data for table horario_medico
 --
-INSERT INTO `horario_medico` (`id_medico`, `dia_semana`, `hora_inicio`, `hora_fin`, `duracion_cita`) VALUES
+INSERT INTO horario_medico (id_medico, dia_semana, hora_inicio, hora_fin, duracion_cita) VALUES
 -- Para Andrea Torres (id_medico = 1001)
 (1001, 1, '08:00:00', '13:00:00', 30),  -- Lunes mañana
 (1001, 2, '08:00:00', '13:00:00', 30),  -- Martes mañana
@@ -285,10 +264,13 @@ FROM medico m
 INNER JOIN horario_medico h ON m.id_medico = h.id_medico
 ORDER BY m.id_medico, h.dia_semana, h.hora_inicio;
 --
+ALTER TABLE medico MODIFY CMP VARCHAR(10);
+ALTER TABLE medico MODIFY RNE VARCHAR(10);
 
 --
 -- Table structure for table `paciente`
 --
+
 DROP TABLE IF EXISTS `paciente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -327,19 +309,22 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `pago`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `pago` (
-  `id_pago` int NOT NULL,
-  `id_admision` int NOT NULL,
-  `monto` decimal(10,2) NOT NULL,
-  `metodo_pago` varchar(30) NOT NULL,
-  `fecha_pago` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado` char(8) NOT NULL,
+  `id_pago` INT NOT NULL AUTO_INCREMENT,
+  `id_admision` INT NOT NULL,
+  `monto` DECIMAL(10,2) NOT NULL,
+  `metodo_pago` VARCHAR(30) NOT NULL,
+  `fecha_pago` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`id_pago`),
   KEY `fk_pago_admision` (`id_admision`),
-  CONSTRAINT `fk_pago_admision` FOREIGN KEY (`id_admision`) REFERENCES `admision` (`id_admision`)
+  CONSTRAINT `fk_pago_admision`
+      FOREIGN KEY (`id_admision`)
+      REFERENCES `admision` (`id_admision`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
+/*!40101 SET character_set_client = @saved_cs_client */;
 --
 -- Dumping data for table `pago`
 --
@@ -381,22 +366,25 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `usuario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `usuario` (
-  `id_usuario` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
-  `rol` varchar(20) NOT NULL,
-  `nombres` varchar(100) NOT NULL,
-  `apellidos` varchar(100) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `estado` char(8) NOT NULL,
-  `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_usuario` INT NOT NULL AUTO_INCREMENT,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `rol` VARCHAR(20) NOT NULL,
+  `nombres` VARCHAR(100) NOT NULL,
+  `apellido_paterno` VARCHAR(100) NOT NULL,
+  `apellido_materno` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) DEFAULT NULL,
+  `estado` CHAR(8) NOT NULL,
+  `fecha_creacion` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id_usuario`),
-  UNIQUE KEY `UQ__Usuario__F3DBC572416C0164` (`username`),
-  UNIQUE KEY `UQ__Usuario__AB6E6164421A6488` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `UQ_usuario_email` (`email`)
+
+) ENGINE=InnoDB
+AUTO_INCREMENT=1001
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,7 +393,8 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1001,'admin','$2a$10$IbcqC2pPvWMNVN/P/Cv.VuMAECRD7gYRch4OZoQ9u1dlEuR3GZyui','ADMIN','Atenas','Bonifaz','atenas@gmail.com','ACTIVO','2026-02-08 05:03:38'),(1002,'usuario2','$2a$10$4d5edMEGLPWRSBgkXgddK.vjecSLTffk2j3Di83pW3Ev5DTxCApUW','MEDICO','Andrea','Torres','Andrea@gmail.com','ACTIVO','2026-02-08 05:03:38');
+INSERT INTO `usuario` VALUES (1001,'$2a$10$IbcqC2pPvWMNVN/P/Cv.VuMAECRD7gYRch4OZoQ9u1dlEuR3GZyui','ADMIN','Atenas','Bonifaz','Obando','atenas@gmail.com','ACTIVO','2026-02-08 05:03:38'),(1002,'$2a$10$4d5edMEGLPWRSBgkXgddK.vjecSLTffk2j3Di83pW3Ev5DTxCApUW','MEDICO','Andrea','Torres','Cerdan','Andrea@gmail.com','ACTIVO','2026-02-08 05:03:38');
+INSERT INTO usuario VALUES('$2a$10$IvOlz2Gfa3Q8hqmpDqAMpe407PdQ58SMIFaqEiDvz8vohuAhXyzFS','ADMISION','Farid','Urquiza','Saavedra','farid@gmail.com','ACTIVO');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -418,21 +407,33 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+--
+-- Table structure for table `auditoria`
+--
+DROP TABLE IF EXISTS `auditoria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auditoria` (
+  `id_auditoria` int NOT NULL AUTO_INCREMENT,
+  `usuario_email` varchar(100) NOT NULL,
+  `accion` varchar(50) NOT NULL,
+  `entidad` varchar(50) DEFAULT NULL,
+  `id_entidad` int DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `fecha` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_inicio_sesion` timestamp NULL DEFAULT NULL,
+  `fecha_fin_sesion` timestamp NULL DEFAULT NULL,
+  `duracion_segundos` int DEFAULT NULL,
+  PRIMARY KEY (`id_auditoria`)
+) ENGINE=InnoDB AUTO_INCREMENT=1010 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- CAMBIOS ESTRELLA
 -- Dump completed on 2026-02-08 17:47:05usuariousuario
-
-
--- SOLO SI NO AGREGASTE APELLIDOS POR SEPARADO
-ALTER TABLE usuario
-ADD COLUMN apellido_paterno VARCHAR(100) NOT NULL AFTER nombres,
-ADD COLUMN apellido_materno VARCHAR(100) NOT NULL AFTER apellido_paterno;
-ALTER TABLE usuario DROP COLUMN apellidos;
-
--- ESTO SI
-
 use hc;
 SELECT * FROM usuario;
-ALTER TABLE pago MODIFY estado VARCHAR(15);
-ALTER TABLE pago 
-MODIFY id_pago INT NOT NULL AUTO_INCREMENT;
+SELECT * FROM paciente;
+SELECT * FROM pago;
+SELECT * FROM medico;
+SELECT * FROM pago;
+SELECT * FROM admision;
+
